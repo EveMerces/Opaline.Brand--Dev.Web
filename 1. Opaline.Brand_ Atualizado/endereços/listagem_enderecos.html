@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opaline - Lista de Endereços</title>
+    <link rel="stylesheet" href="listagem.css">
+</head>
+
+<body>
+    <header>
+        <h1 class="main-title">Opaline.brand</h1>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../pagina_inicial/index.html">• Opaline</a></li>
+                <li><a href="../pagina_inicial/sobre_nos.html">• Sobre Nós</a></li>
+                <li><a href="../cadastro_usuario/tela_cadastro.html">• Cadastro</a></li>
+                <li><a href="../login/login.html">• Login</a></li>
+            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Título</th>
+                        <th scope="col">CEP</th>
+                        <th scope="col">Endereço</th>
+                        <th scope="col">Número</th>
+                        <th scope="col">Opções de Ações</th>
+                    </tr>
+                </thead>
+                <TBody>
+                    <tr id="Campos">
+                        <th id="Título"></th>
+                        <td id="CEP"></td>
+                        <td id="Rua"></td>
+                        <td id="Número"></td>
+                        <td class="actions">
+                            <button onclick="atualizar()">Atualizar</button>
+                            <button onclick="cadastrar()">Deletar</button>
+                            <button onclick="window.location.href='cadastro.html'">Cadastrar</button>
+</td>
+
+                    </tr>
+                </TBody>
+            </table>
+        </div>
+
+         <div class="formulario" id="formulario">
+        <div class="campos_html">
+            <div>Titulo</div>
+            <input id="Title" type="text">
+        </div>
+        <div class="campos_html">
+            <div>Cep</div>
+            <input id="Cep" type="text">
+        </div>
+        <div class="campos_html">
+            <div>Endereço</div>
+            <input id="Address" type="text">
+        </div>
+        <div class="campos_html">
+            <div>Número</div>
+            <input id="Number" type="text">
+        </div>
+
+    </main>
+
+    <script src="listagem_enderecos.js"></script>
+</body>
+
+</html>

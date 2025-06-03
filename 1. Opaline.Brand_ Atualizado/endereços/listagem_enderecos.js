@@ -1,159 +1,128 @@
-async function listagem(){
+let enderecoAtualId = null;
 
-    let token = JSON.parse(localStorage.getItem
-    ("user"));
-    
-    let api = await fetch("https://go-wash-api.onrender.com/api/auth/address", {
-        method: "GET",
-        headers: {
-            'Content-type': 'application/json', 
-            'Authorization': 'Bearer ' + token.access_token
-    
+async function buscarEnderecos() {
+    const tokenData = JSON.parse(localStorage.getItem("user"));
+    const token = tokenData?.access_token;
+
+    if (!token) {
+        alert("Token inválido. Faça login novamente.");
+        window.location.href = "../login/login.html";
+        return;
+    }
+
+    const tabela = document.getElementById("tabela-enderecos");
+    const template = document.getElementById("template-linha");
+    tabela.innerHTML = "";
+
+    try {
+        const resposta = await fetch("https://go-wash-api.onrender.com/api/auth/address", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        const dados = await resposta.json();
+        const enderecos = Array.isArray(dados) ? dados : dados.data || [];
+
+        if (enderecos.length === 0) {
+            tabela.innerHTML = "<tr><td colspan='5'>Nenhum endereço cadastrado.</td></tr>";
+            return;
         }
 
-    });
-    if (api.ok){
-        let response = await api.json()
-        console.log(response)
+        enderecos.forEach((item) => {
+            const novaLinha = template.content.cloneNode(true);
+            novaLinha.querySelector(".titulo").textContent = item.title;
+            novaLinha.querySelector(".cep").textContent = item.cep;
+            novaLinha.querySelector(".endereco").textContent = item.address;
+            novaLinha.querySelector(".numero").textContent = item.number;
+
+            novaLinha.querySelector(".atualizar").onclick = function () {
+                abrirModalEdicao(item);
+            };
+            novaLinha.querySelector(".excluir").onclick = function () {
+                excluirEndereco(item.id);
+            };
+
+            tabela.appendChild(novaLinha);
+        });
+
+    } catch (erro) {
+        console.error("Erro ao buscar endereços:", erro);
+        tabela.innerHTML = "<tr><td colspan='5'>Erro ao carregar os dados.</td></tr>";
     }
 }
-//Requisições
-async function FazerRequisão(url, metodo, corpo = null) {
-    let configuração = {
-        method: metodo,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
+
+function abrirModalEdicao(item) {
+    enderecoAtualId = item.id;
+    document.getElementById("edit-titulo").value = item.title || '';
+    document.getElementById("edit-cep").value = item.cep || '';
+    document.getElementById("edit-endereco").value = item.address || '';
+    document.getElementById("edit-numero").value = item.number || '';
+    document.getElementById("edit-complemento").value = item.complement || '';
+    document.getElementById("modal-edicao").style.display = "flex";
+}
+
+function fecharModal() {
+    document.getElementById("modal-edicao").style.display = "none";
+    enderecoAtualId = null;
+}
+
+async function salvarEdicao() {
+    const tokenData = JSON.parse(localStorage.getItem("user"));
+    const token = tokenData?.access_token;
+
+    const dadosAtualizados = {
+        title: document.getElementById("edit-titulo").value,
+        cep: document.getElementById("edit-cep").value,
+        address: document.getElementById("edit-endereco").value,
+        number: document.getElementById("edit-numero").value,
+        complement: document.getElementById("edit-complemento").value,
     };
 
-    if (corpo) configuração.body = JSON.stringify(corpo)
+    try {
+        const resposta = await fetch(`https://go-wash-api.onrender.com/api/auth/address/${enderecoAtualId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(dadosAtualizados)
+        });
 
-        let resposta = await fetch(url,configuração);
-        console.log("Ok", resposta)
+        if (!resposta.ok) throw new Error("Erro ao salvar atualização");
 
-    if (!resposta.ok) {
-        throw new error (`Erro ${response.status}: ${response.statusText}`);
+        alert("Endereço atualizado com sucesso!");
+        fecharModal();
+        buscarEnderecos();
+
+    } catch (erro) {
+        console.error("Erro ao atualizar:", erro);
+        alert("Erro ao atualizar o endereço.");
     }
-
-    return response.json();
 }
 
-async function buscandoApi() {
+async function excluirEndereco(id) {
+    const confirmar = confirm("Deseja realmente excluir este endereço?");
+    if (!confirmar) return;
+
+    const tokenData = JSON.parse(localStorage.getItem("user"));
+    const token = tokenData?.access_token;
+
     try {
-        const response = await fetch('https://go-wash-api.onrender.com/api/auth/address', {
-            method: 'GET',
+        const resposta = await fetch(`https://go-wash-api.onrender.com/api/auth/address/${id}`, {
+            method: "DELETE",
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                "Authorization": `Bearer ${token}`
             }
         });
-        
-        if (!response.ok) {
-            throw new Error(`Erro HTTP! status: ${response.status}`);
-        }
 
-        let responseData = await response.json();
-        console.log("Dados recebidos:", responseData);
-        
-        
-        if (Array.isArray(enderecos) && enderecos.length > 0) {
-            enderecos.forEach((item )=> {
-                let newRow = elementos.modeloLinha.cloneNode(true);
-                let TBody = document.querySelector("table TBody")
-                newRow.id = `endereco_${item.id}`;
-                newRow.style.display = "";
-                
-                // Remove IDs duplicados
-                newRow.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-                
-                // Preenche os dados - ATUALIZADO COM OS NOMES DE CAMPOS CORRETOS
-                newRow.querySelector("Title").value = item.title || '';
-                newRow.querySelector("Cep").value = item.cep || item.cop || ''; // Note o fallback para 'cop'
-                newRow.querySelector("Address").value = item.address || '';
-                newRow.querySelector("Number").value = item.number || '';
-                
-                // Configura os botões
-                newRow.querySelector(".atualizar").onclick = () => atualizar(item.id);
-                newRow.querySelector(".excluir").onclick = () => excluir(item.id);
-                
-                TBody.appendChild(newRow);
-            });
-        } else {
-            console.log("Sem dados cadastrados...");
-            const tr = document.createElement('tr');
-            tr.innerHTML = '<td colspan="7">Nenhum endereço cadastrado</td>';
-            TBody.appendChild(tr);
-        }
-    } catch (error) {
-        console.error("Erro ao buscar endereços:", error);
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="7">Erro ao carregar endereços</td>';
-        TBody.appendChild(tr);
-    }
-}
- 
-//Cadastro
-async function cadastrar() {
-    try {
-        let linha = document.getElementById ('Campos_${id}');
-            let campos_html = {
-                Título: document.getElementById("Title").value,
-                CEP: document.getElementById("Cep").value,
-                Rua: document.getElementById("Address").value,
-                Número: document.getElementById("Number").value,
-            };
+        if (!resposta.ok) throw new Error("Erro ao excluir");
 
-                 await fazerRequisicao('https://go-wash-api.onrender.com/api/auth/address', 'POST', campos_html);
-
-                 alert("Endereço cadastrado com sucesso!");
-                 resetarFormulario();
-                 await buscandoApi();
-    } catch (error) {
-                console.error("Erro ao cadastrar:", error);
-                alert("Erro ao cadastrar endereço. Verifique os dados e tente novamente.");
-    }
-}
-
-//Atualização
-    async function atualizar(parametro) {
-        try {
-            let linha = document.getElementById ('Campos_${id}');
-            let campos_html = {
-                Título: linha.querySelector("Título").value,
-                CEP: linha.querySelector("CEP").value,
-                Rua: linha.querySelector("Rua").value,
-                Número: linha.querySelector("Número").value,
-            };
-
-            await FazerRequisão(`https://go-wash-api.onrender.com/api/auth/address/${id}`, 
-            'POST', 
-            campos_html
-        );
-        
-        alert("Endereço atualizado com sucesso!");
-        await buscandoApi();
-    } catch (error) {
-        console.error("Erro ao atualizar:", error);
-        alert("Erro ao atualizar endereço.");
-    }
-}
-
-//Exclusão
-async function excluir(id) {
-    if (!confirm('Tem certeza que deseja excluir?')) return;
-    
-    try {
-        await fazerRequisicao(
-            `https://go-wash-api.onrender.com/api/auth/address/${id}`, 
-            'DELETE'
-        );
-        
         alert("Endereço excluído com sucesso!");
-        await buscandoApi();
-    } catch (error) {
-        console.error("Erro ao excluir:", error);
-        alert("Erro ao excluir endereço.");
+        buscarEnderecos();
+
+    } catch (erro) {
+        console.error("Erro ao excluir:", erro);
+        alert("Erro ao excluir o endereço.");
     }
 }
 
+buscarEnderecos();

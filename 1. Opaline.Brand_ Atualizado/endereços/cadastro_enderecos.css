@@ -1,0 +1,104 @@
+/* Fundo e fonte geral */
+body {
+    font-family: 'Georgia', serif;
+    background-color: #6f3b39;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estrutura principal */
+.container {
+    width: 80%;
+    margin: auto;
+    background: #fdf8f2;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabeçalho */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #9e4040; /* cor mais visível e consistente */
+}
+
+/* Navegação */
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: #9e4040;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+    color: #d25c5c;
+}
+
+/* Formulário */
+form {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+label {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #9e4040;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #9e4040;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="password"]:focus {
+    border-color: #d25c5c;
+    outline: none;
+}
+
+/* Botões */
+button {
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #9e4040;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d25c5c;
+}

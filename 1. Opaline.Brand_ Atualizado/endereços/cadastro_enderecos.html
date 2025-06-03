@@ -4,89 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
-    <script src=""></script>
-    <link rel="stylesheet" href="index.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fdf8f2;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        header {
-            text-align: center;
-        }
-        .main-title {
-            font-size: 32px;
-            font-weight: bold;
-            color: #f8e7dd;
-        }
-        .main-nav ul {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .main-nav ul li {
-            display: inline;
-        }
-        .main-nav ul li a {
-            text-decoration: none;
-            color: #f8e7dd;
-            font-weight: bold;
-        }
-        form {
-            max-width: 400px;
-            margin: auto;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #9e4040;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="date"],
-        input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #9e4040;
-            border-radius: 4px;
-        }
-        input[type="checkbox"] {
-            margin-top: 10px;
-        }
-        input[type="button"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #9e4040;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-        input[type="button"]:hover {
-            background-color: #9e4040;
-        }
-    </style>
+    <link rel="stylesheet" href="../endereços/cadastro_enderecos.css">
 </head>
+
 <body>
     <div class="container">
         <header>
-            <h1 class="main-title">CADASTRO DE ENDEREÇOS</h1>
-            <link rel="stylesheet" href="index.css">
+            <h1 class="main-title">Cadastro de Endereços</h1>
+            <link rel="stylesheet" href="../endereços/cadastro_enderecos.css">
             <nav class="main-nav">
                 <ul>
                 <li><a href="../pagina_inicial/index.html">• Opaline</a></li>
@@ -103,7 +28,7 @@
             <label> Número <input type="text" name="numero" id="numero" /></label> 
             <label> Complemento <input type="text" name="complemento" id="complemento" /></label> 
               <button onclick="cadastro_endereco(event)">Salvar</button>
-              <button type="button" onclick="window.location.href='listagem.html'">Cancelar</button>
+              <button type="button" onclick="window.location.href='listagem_enderecos.html'">Cancelar</button>
 
         </form>
     </div>

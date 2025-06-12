@@ -40,6 +40,10 @@ async function buscarEnderecos() {
             novaLinha.querySelector(".excluir").onclick = function () {
                 excluirEndereco(item.id);
             };
+            novaLinha.querySelector(".copiar").onclick = function () {
+                copiarEndereco(item);
+            };
+
 
             tabela.appendChild(novaLinha);
         });
@@ -126,3 +130,37 @@ async function excluirEndereco(id) {
 }
 
 buscarEnderecos();
+    async function copiarEndereco(enderecoOriginal) {
+    const tokenData = JSON.parse(localStorage.getItem("user"));
+    const token = tokenData?.access_token;
+
+    const novoEndereco = {
+        title: enderecoOriginal.title,
+        cep: enderecoOriginal.cep,
+        address: enderecoOriginal.address,
+        number: enderecoOriginal.number,
+        complement: enderecoOriginal.complement
+    };
+
+    try {
+        const resposta = await fetch("https://go-wash-api.onrender.com/api/auth/address", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(novoEndereco)
+        });
+
+        if (!resposta.ok) throw new Error("Erro ao copiar endereço");
+
+        alert("Endereço copiado com sucesso!");
+        buscarEnderecos();
+
+    } catch (erro) {
+        console.error("Erro ao copiar endereço:", erro);
+        alert("Erro ao copiar o endereço.");
+    }
+}
+    
+
